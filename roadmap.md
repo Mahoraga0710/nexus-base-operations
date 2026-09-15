@@ -1,10 +1,10 @@
 # NEXUS Roadmap
 
-## FOUNDATION (in progress)
-- [ ] Authentication
-- [ ] Database
-- [ ] User roles
-- [ ] Dashboard
+## FOUNDATION (done)
+- [x] Authentication
+- [x] Database
+- [x] User roles
+- [x] Dashboard
 
 ## AUTHORIZATION
 - [ ] Admin tested
