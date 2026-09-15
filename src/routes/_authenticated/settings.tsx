@@ -101,7 +101,7 @@ function SettingsPage() {
                     <TableCell className="text-muted-foreground">{person.job_title ?? "—"}</TableCell>
                     <TableCell>
                       <Select
-                        value={person.role ?? undefined}
+                        value={person.role ?? ""}
                         onValueChange={(value) => changeRole(person.id, value as AppRole)}
                       >
                         <SelectTrigger>
