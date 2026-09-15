@@ -32,16 +32,26 @@ function AuthPage() {
   const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
   const [awaitingConfirm, setAwaitingConfirm] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) navigate({ to: "/dashboard", replace: true });
+      else setCheckingSession(false);
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) navigate({ to: "/dashboard", replace: true });
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
+
+  if (checkingSession) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Hexagon className="size-8 animate-pulse text-primary" />
+      </div>
+    );
+  }
 
   async function handleSignIn(event: React.FormEvent) {
     event.preventDefault();
