@@ -37,12 +37,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
+    let lastUserId: string | null = null;
     const { data: sub } = supabase.auth.onAuthStateChange((event, nextSession) => {
       setSession(nextSession);
       setLoading(false);
-      if (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED") {
+      const nextUserId = nextSession?.user.id ?? null;
+      const userChanged = nextUserId !== lastUserId;
+      lastUserId = nextUserId;
+      // Token refreshes keep the same user; only re-fetch when the account actually changes.
+      if (userChanged && (event === "SIGNED_IN" || event === "SIGNED_OUT" || event === "USER_UPDATED")) {
         router.invalidate();
         if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+        else queryClient.clear();
       }
     });
 
