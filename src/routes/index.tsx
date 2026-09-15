@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Hexagon, ShieldCheck, Users, KanbanSquare } from "lucide-react";
 
 import { useAuth } from "@/components/auth-provider";
@@ -27,7 +28,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Landing() {
-  const { session } = useAuth();
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  // Already signed in? Skip the landing page entirely.
+  useEffect(() => {
+    if (!loading && session) navigate({ to: "/dashboard", replace: true });
+  }, [loading, session, navigate]);
 
   return (
     <div className="min-h-screen bg-background">
