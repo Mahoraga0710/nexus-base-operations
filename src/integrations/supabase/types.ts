@@ -200,6 +200,141 @@ export type Database = {
           },
         ]
       }
+      feedback: {
+        Row: {
+          author_id: string
+          body: string
+          client_id: string | null
+          created_at: string
+          id: string
+          project_id: string
+          rating: number | null
+          status: Database["public"]["Enums"]["feedback_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          project_id: string
+          rating?: number | null
+          status?: Database["public"]["Enums"]["feedback_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          client_id?: string | null
+          created_at?: string
+          id?: string
+          project_id?: string
+          rating?: number | null
+          status?: Database["public"]["Enums"]["feedback_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      files: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          file_name: string
+          id: string
+          is_internal: boolean
+          mime_type: string | null
+          project_id: string | null
+          size_bytes: number | null
+          storage_path: string
+          task_id: string | null
+          updated_at: string
+          uploader_id: string
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          file_name: string
+          id?: string
+          is_internal?: boolean
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          storage_path: string
+          task_id?: string | null
+          updated_at?: string
+          uploader_id: string
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          file_name?: string
+          id?: string
+          is_internal?: boolean
+          mime_type?: string | null
+          project_id?: string | null
+          size_bytes?: number | null
+          storage_path?: string
+          task_id?: string | null
+          updated_at?: string
+          uploader_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "files_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_uploader_id_fkey"
+            columns: ["uploader_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -246,30 +381,36 @@ export type Database = {
           avatar_url: string | null
           client_id: string | null
           created_at: string
+          email: string | null
           full_name: string | null
           id: string
           job_title: string | null
           phone: string | null
+          status: Database["public"]["Enums"]["account_status"]
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
           client_id?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id: string
           job_title?: string | null
           phone?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
           client_id?: string | null
           created_at?: string
+          email?: string | null
           full_name?: string | null
           id?: string
           job_title?: string | null
           phone?: string | null
+          status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
         }
         Relationships: [
@@ -517,8 +658,10 @@ export type Database = {
       is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
+      account_status: "pending" | "active" | "suspended" | "disabled"
       app_role: "admin" | "employee" | "client"
       client_status: "prospect" | "active" | "archived"
+      feedback_status: "open" | "acknowledged" | "resolved"
       priority_level: "low" | "medium" | "high" | "urgent"
       project_member_role: "lead" | "member" | "viewer"
       project_status:
@@ -655,8 +798,10 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      account_status: ["pending", "active", "suspended", "disabled"],
       app_role: ["admin", "employee", "client"],
       client_status: ["prospect", "active", "archived"],
+      feedback_status: ["open", "acknowledged", "resolved"],
       priority_level: ["low", "medium", "high", "urgent"],
       project_member_role: ["lead", "member", "viewer"],
       project_status: [
