@@ -1,10 +1,11 @@
 # NEXUS Roadmap
 
-## FOUNDATION (done)
-- [x] Authentication
-- [x] Database
-- [x] User roles
-- [x] Dashboard
+## FOUNDATION / PHASE 0 (done + verified)
+- [x] Authentication (register, login, logout, password reset, persistent session)
+- [x] Database (users, clients, projects, tasks, comments, feedback, files, activity, notifications)
+- [x] User roles (admin / employee / client, stored in user_roles, enforced by RLS)
+- [x] Dashboard (name, email, role, account status, member since + real counts)
+- [x] Client data isolation verified at database level (cross-client read returns 0 rows)
 
 ## AUTHORIZATION
 - [ ] Admin tested
