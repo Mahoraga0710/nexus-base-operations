@@ -32,6 +32,8 @@ function AuthPage() {
   const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
   const [awaitingConfirm, setAwaitingConfirm] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
@@ -80,6 +82,21 @@ function AuthPage() {
     }
   }
 
+  async function handleForgot(event: React.FormEvent) {
+    event.preventDefault();
+    setBusy(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setResetSent(true);
+    toast.success("Reset link sent.");
+  }
+
   async function handleGoogle() {
     const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
     if (result.error) {
@@ -105,7 +122,45 @@ function AuthPage() {
             <CardDescription>Sign in to your workspace, or create an account.</CardDescription>
           </CardHeader>
           <CardContent>
-            {awaitingConfirm ? (
+            {forgotMode ? (
+              resetSent ? (
+                <div className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    If an account exists for <span className="font-medium text-foreground">{email}</span>, a password
+                    reset link is on its way. Open it to choose a new password.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setForgotMode(false);
+                      setResetSent(false);
+                    }}
+                  >
+                    Back to sign in
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleForgot} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="forgot-email">Email</Label>
+                    <Input
+                      id="forgot-email"
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={busy}>
+                    {busy ? "Sending…" : "Send reset link"}
+                  </Button>
+                  <Button type="button" variant="ghost" className="w-full" onClick={() => setForgotMode(false)}>
+                    Back to sign in
+                  </Button>
+                </form>
+              )
+            ) : awaitingConfirm ? (
               <p className="text-sm text-muted-foreground">
                 We sent a confirmation link to <span className="font-medium text-foreground">{email}</span>. Open it to
                 activate your account, then come back and sign in.
@@ -142,6 +197,13 @@ function AuthPage() {
                     <Button type="submit" className="w-full" disabled={busy}>
                       {busy ? "Signing in…" : "Sign in"}
                     </Button>
+                    <button
+                      type="button"
+                      className="w-full text-center text-xs text-muted-foreground underline-offset-4 hover:underline"
+                      onClick={() => setForgotMode(true)}
+                    >
+                      Forgot your password?
+                    </button>
                   </form>
                 </TabsContent>
 

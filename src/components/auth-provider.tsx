@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type AppRole = "admin" | "employee" | "client";
 
+export type AccountStatus = "pending" | "active" | "suspended" | "disabled";
+
 export type Profile = {
   id: string;
   full_name: string | null;
@@ -14,6 +16,9 @@ export type Profile = {
   job_title: string | null;
   phone: string | null;
   client_id: string | null;
+  email: string | null;
+  status: AccountStatus;
+  created_at: string;
 };
 
 type AuthContextValue = {
@@ -69,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const [profileRes, rolesRes] = await Promise.all([
         supabase
           .from("profiles")
-          .select("id, full_name, avatar_url, job_title, phone, client_id")
+          .select("id, full_name, avatar_url, job_title, phone, client_id, email, status, created_at")
           .eq("id", userId!)
           .maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", userId!),
