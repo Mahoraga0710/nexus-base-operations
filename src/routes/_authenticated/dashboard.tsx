@@ -74,6 +74,36 @@ function DashboardPage() {
       title="Dashboard"
       description={`Signed in as ${profile?.full_name ?? "your account"}${primaryRole ? ` · ${primaryRole}` : ""}`}
     >
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-base">Your account</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Name</p>
+            <p className="text-sm font-medium">{profile?.full_name ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Email</p>
+            <p className="truncate text-sm font-medium">{profile?.email ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Role</p>
+            <p className="text-sm font-medium capitalize">{primaryRole ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Account status</p>
+            <p className="text-sm font-medium capitalize">{profile?.status ?? "—"}</p>
+          </div>
+          <div>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Member since</p>
+            <p className="text-sm font-medium">
+              {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : "—"}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
           <Card key={stat.label}>
