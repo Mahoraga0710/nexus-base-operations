@@ -479,7 +479,6 @@ function ClientsPage() {
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
-        </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </AppShell>
