@@ -14,11 +14,11 @@
 - [ ] ID manipulation tested
 
 ## CLIENTS
-- [ ] Create
-- [ ] Read
-- [ ] Update
-- [ ] Delete
-- [ ] Persistence
+- [x] Create
+- [x] Read
+- [x] Update
+- [x] Delete (admin only)
+- [x] Persistence
 
 ## PROJECTS
 - [ ] Create
