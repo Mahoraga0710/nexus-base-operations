@@ -890,6 +890,14 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      my_request_allowance: {
+        Args: never
+        Returns: {
+          daily_limit: number
+          tier: Database["public"]["Enums"]["plan_tier"]
+          used_today: number
+        }[]
+      }
       tier_daily_limit: {
         Args: { _tier: Database["public"]["Enums"]["plan_tier"] }
         Returns: number
