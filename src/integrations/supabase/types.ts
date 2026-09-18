@@ -75,6 +75,156 @@ export type Database = {
           },
         ]
       }
+      client_requests: {
+        Row: {
+          body: string
+          client_id: string
+          created_at: string
+          created_project_id: string | null
+          created_task_id: string | null
+          desired_date: string | null
+          id: string
+          kind: Database["public"]["Enums"]["request_kind"]
+          priority: Database["public"]["Enums"]["priority_level"]
+          project_id: string | null
+          requester_id: string
+          resolution_note: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: Database["public"]["Enums"]["request_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body: string
+          client_id: string
+          created_at?: string
+          created_project_id?: string | null
+          created_task_id?: string | null
+          desired_date?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["request_kind"]
+          priority?: Database["public"]["Enums"]["priority_level"]
+          project_id?: string | null
+          requester_id: string
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          client_id?: string
+          created_at?: string
+          created_project_id?: string | null
+          created_task_id?: string | null
+          desired_date?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["request_kind"]
+          priority?: Database["public"]["Enums"]["priority_level"]
+          project_id?: string | null
+          requester_id?: string
+          resolution_note?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_requests_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_requests_created_project_id_fkey"
+            columns: ["created_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_requests_created_task_id_fkey"
+            columns: ["created_task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_requests_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_requests_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_requests_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          client_id: string
+          created_at: string
+          current_period_end: string | null
+          id: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: Database["public"]["Enums"]["plan_tier"]
+          updated_at: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          client_id: string
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["plan_tier"]
+          updated_at?: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          client_id?: string
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["plan_tier"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_subscriptions_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: true
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clients: {
         Row: {
           contact_email: string | null
@@ -270,6 +420,7 @@ export type Database = {
           is_internal: boolean
           mime_type: string | null
           project_id: string | null
+          request_id: string | null
           size_bytes: number | null
           storage_path: string
           task_id: string | null
@@ -284,6 +435,7 @@ export type Database = {
           is_internal?: boolean
           mime_type?: string | null
           project_id?: string | null
+          request_id?: string | null
           size_bytes?: number | null
           storage_path: string
           task_id?: string | null
@@ -298,6 +450,7 @@ export type Database = {
           is_internal?: boolean
           mime_type?: string | null
           project_id?: string | null
+          request_id?: string | null
           size_bytes?: number | null
           storage_path?: string
           task_id?: string | null
@@ -317,6 +470,13 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "files_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "client_requests"
             referencedColumns: ["id"]
           },
           {
@@ -532,6 +692,76 @@ export type Database = {
           },
         ]
       }
+      request_links: {
+        Row: {
+          created_at: string
+          id: string
+          label: string | null
+          request_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          request_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string | null
+          request_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_links_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "client_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_usage: {
+        Row: {
+          client_id: string
+          created_at: string
+          id: string
+          last_request_at: string | null
+          request_count: number
+          updated_at: string
+          usage_date: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          id?: string
+          last_request_at?: string | null
+          request_count?: number
+          updated_at?: string
+          usage_date?: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          id?: string
+          last_request_at?: string | null
+          request_count?: number
+          updated_at?: string
+          usage_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_usage_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           assignee_id: string | null
@@ -639,6 +869,10 @@ export type Database = {
         Args: { _project_id: string; _user_id: string }
         Returns: boolean
       }
+      can_view_request: {
+        Args: { _request_id: string; _user_id: string }
+        Returns: boolean
+      }
       comment_project_id: {
         Args: { _project_id: string; _task_id: string }
         Returns: string
@@ -656,12 +890,17 @@ export type Database = {
         Returns: boolean
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
+      tier_daily_limit: {
+        Args: { _tier: Database["public"]["Enums"]["plan_tier"] }
+        Returns: number
+      }
     }
     Enums: {
       account_status: "pending" | "active" | "suspended" | "disabled"
       app_role: "admin" | "employee" | "client"
       client_status: "prospect" | "active" | "archived"
       feedback_status: "open" | "acknowledged" | "resolved"
+      plan_tier: "free" | "pro" | "enterprise"
       priority_level: "low" | "medium" | "high" | "urgent"
       project_member_role: "lead" | "member" | "viewer"
       project_status:
@@ -670,7 +909,15 @@ export type Database = {
         | "on_hold"
         | "completed"
         | "cancelled"
-      task_status: "backlog" | "todo" | "in_progress" | "review" | "done"
+      request_kind: "task" | "project"
+      request_status: "submitted" | "accepted" | "declined" | "completed"
+      task_status:
+        | "backlog"
+        | "todo"
+        | "in_progress"
+        | "review"
+        | "done"
+        | "requested"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -802,6 +1049,7 @@ export const Constants = {
       app_role: ["admin", "employee", "client"],
       client_status: ["prospect", "active", "archived"],
       feedback_status: ["open", "acknowledged", "resolved"],
+      plan_tier: ["free", "pro", "enterprise"],
       priority_level: ["low", "medium", "high", "urgent"],
       project_member_role: ["lead", "member", "viewer"],
       project_status: [
@@ -811,7 +1059,16 @@ export const Constants = {
         "completed",
         "cancelled",
       ],
-      task_status: ["backlog", "todo", "in_progress", "review", "done"],
+      request_kind: ["task", "project"],
+      request_status: ["submitted", "accepted", "declined", "completed"],
+      task_status: [
+        "backlog",
+        "todo",
+        "in_progress",
+        "review",
+        "done",
+        "requested",
+      ],
     },
   },
 } as const
