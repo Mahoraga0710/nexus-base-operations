@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Building2, FolderKanban, ListChecks, Settings, Hexagon } from "lucide-react";
+import { LayoutDashboard, Building2, FolderKanban, ListChecks, Inbox, Settings, Hexagon } from "lucide-react";
 
 import {
   Sidebar,
@@ -22,6 +22,7 @@ const items: NavItem[] = [
   { title: "Clients", url: "/clients", icon: Building2, staffOnly: true },
   { title: "Projects", url: "/projects", icon: FolderKanban },
   { title: "Tasks", url: "/tasks", icon: ListChecks },
+  { title: "Requests", url: "/requests", icon: Inbox },
   { title: "Settings", url: "/settings", icon: Settings, adminOnly: true },
 ];
 
